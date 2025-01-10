@@ -1,6 +1,9 @@
 #include "headers/Board.h"
 #include "headers/Piece.h"
 #include <cmath>
+#include <ostream>
+#include <sstream>
+#include <string>
 
 Board::Board(Vector2 size) : size(size) {}
 void Board::Update()
@@ -10,17 +13,25 @@ void Board::Update()
     if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
     {
         Vector2 prevClickPos = clickedPos;
-        if(prevClickPos.x == clickedPos.x && prevClickPos.y == clickedPos.y)
+        if(prevClickPos.x == -1 && prevClickPos.y == -1)
         {
             clickedPos = {floor(mouse.x / tilesize), floor(mouse.y / tilesize)};
-            clickedPos = {-1, -1};
         } else {
-            for(Piece* piece : Piece::pieces)
+            clickedPos = {floor(mouse.x / tilesize), floor(mouse.y / tilesize)};
+            if(prevClickPos.x == clickedPos.x && prevClickPos.y == clickedPos.y)
             {
-                if(piece->pos.x == prevClickPos.x && piece->pos.y == prevClickPos.y)
+                clickedPos = {floor(mouse.x / tilesize), floor(mouse.y / tilesize)};
+                clickedPos = {-1, -1};
+                clickedMark = {-1, -1};
+            } else {
+                for(Piece* piece : Piece::pieces)
                 {
-                    clickedPos = {floor(mouse.x / tilesize), floor(mouse.y / tilesize)};
-                    Piece::MoveTo(piece, clickedPos, piece->id);
+                    if(piece->pos.x == prevClickPos.x && piece->pos.y == prevClickPos.y)
+                    {
+                        clickedPos = {floor(mouse.x / tilesize), floor(mouse.y / tilesize)};
+                        Piece::MoveTo(piece, clickedPos, piece->id);
+                        clickedPos = {-1, -1};
+                    }
                 }
             }
         }
@@ -68,4 +79,13 @@ void Board::Draw()
             DrawRectangle(x * tilesize, y * tilesize, tilesize, tilesize, color);
         }
     }
+    
+    ostringstream oss;
+    ostringstream oss2;
+    oss << "(" << clickedPos.x << ", " << clickedPos.y << ")";
+    oss2 << "(" << GetMousePosition().x << ", " << GetMousePosition().y << ")";
+    string posString = oss.str();
+    string posString2 = oss2.str();
+    DrawText(posString.c_str(), 10, 10, 20, BLACK);
+    DrawText(posString2.c_str(), 10, 40, 20, BLACK);
 }

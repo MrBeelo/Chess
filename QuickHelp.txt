@@ -1,0 +1,16 @@
+To compile:
+
+* CD into the build folder
+* run `./premake5 gmake2`
+* CD back to the root
+* run `make`
+
+Note that you will need to manually copy the assets folder for now...
+
+Git Actions:
+
+git status (optional, outputs all changed files)
+git add . (to stage all files)
+git add <file1> <file2> (to stage specific files)
+git commit -m "Your commit message here" (to commit)
+git push origin main (to push, with main being the branch name)
