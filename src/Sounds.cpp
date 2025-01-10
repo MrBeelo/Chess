@@ -5,8 +5,8 @@ Sound Sounds::moveOpponent;
 
 void Sounds::LoadContent()
 {
-    moveSelf = LoadSound("assets/sounds/move-self.wav");
-    moveOpponent = LoadSound("assets/sounds/move-opponent");
+    moveSelf = LoadSound("sounds/move-self.wav");
+    moveOpponent = LoadSound("sounds/move-opponent");
     SetSoundVolume(moveSelf, 1.0f);
     SetSoundVolume(moveOpponent, 1.0f);
 }

@@ -6,6 +6,8 @@
 #include "headers/Piece.h"
 #include "headers/Sounds.h"
 
+#include "headers/resource_dir.h"
+
 using namespace std;
 
 int main ()
@@ -17,6 +19,8 @@ int main ()
 
 	InitWindow(windowX, windowY, "Chess");
 	InitAudioDevice();
+	
+	SearchAndSetResourceDir("assets");
 
 	Sounds::LoadContent();
 	Pawn::LoadContent();

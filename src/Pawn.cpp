@@ -8,8 +8,8 @@ Pawn::Pawn(Vector2 pos, bool isWhite, int id) : Piece(pos, isWhite, id) {}
 
 void Pawn::LoadContent()
 {
-    textureWhite = LoadTexture("assets/sprites/wp.png");
-    textureBlack = LoadTexture("assets/sprites/bp.png");
+    textureWhite = LoadTexture("sprites/wp.png");
+    textureBlack = LoadTexture("sprites/bp.png");
 }
 
 void Pawn::UnloadContent()
