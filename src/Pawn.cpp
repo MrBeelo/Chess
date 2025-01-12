@@ -1,10 +1,12 @@
 #include "headers/Pawn.h"
+#include "headers/ChessNotation.h"
 
 Texture2D Pawn::textureWhite;
 Texture2D Pawn::textureBlack;
 vector<Pawn*> Pawn::pawns;
 
 Pawn::Pawn(Vector2 pos, bool isWhite, int id) : Piece(pos, isWhite, id) {}
+Pawn::~Pawn() {}
 
 void Pawn::LoadContent()
 {
@@ -16,6 +18,10 @@ void Pawn::UnloadContent()
 {
     UnloadTexture(textureWhite);
     UnloadTexture(textureBlack);
+    for(Pawn* pawn : pawns)
+    {
+        delete pawn;
+    }
 }
 
 void Pawn::Make(Vector2 pos, bool isWhite, int id)
@@ -27,15 +33,26 @@ void Pawn::Make(Vector2 pos, bool isWhite, int id)
 
 void Pawn::Make(char file, int rank, bool isWhite, int id)
 {
-    float x = file - 'A';
-    float y = 7 - (rank - 1);
-    Vector2 pos = {x, y};
+    Vector2 pos = ChessNotation::CharIntToVec(file, rank);
     
     Make(pos, isWhite, id);
 }
 
 void Pawn::Update()
-{ Piece::Update(); }
+{ 
+    Piece::Update(); 
+    
+    availablePositions.clear();
+    int yDir = isWhite ? -1 : 1;
+    
+    availablePositions.push_back({pos.x, pos.y + yDir});
+    if((isWhite && pos.y == 6) || (!isWhite && pos.y == 1))
+    {
+        availablePositions.push_back({pos.x, pos.y + (yDir * 2)});
+    }
+    
+    Piece::CheckAvailablePositions(this);
+}
 
 void Pawn::Draw()
 {

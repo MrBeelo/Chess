@@ -9,6 +9,8 @@ class Pawn : public Piece
 {
     public:
     Pawn(Vector2 pos, bool isWhite, int id);
+    ~Pawn();
+    
     static Texture2D textureWhite;
     static Texture2D textureBlack;
     static vector<Pawn*> pawns;

@@ -13,14 +13,18 @@ class Piece
     Vector2 pos;
     pair<char, int> chessPos;
     Rectangle rect = {pos.x * Board::tilesize, pos.y * Board::tilesize, 75, 75};
-    int id;
     bool isWhite;
+    int id;
     static vector<Piece*> pieces;
+    vector<Vector2> availablePositions;
     
     Piece(Vector2 pos, bool isWhite, int id);
+    virtual ~Piece();
     
+    static void UnloadContent();
     virtual void Update();
     virtual void Draw();
+    static void CheckAvailablePositions(Piece* piece);
     static bool CanMoveTo(Piece* piece, Vector2 position, int id);
     static void MoveTo(Piece* piece, Vector2 position, int id);
     static void MoveTo(Piece* piece, char file, int rank, int id);

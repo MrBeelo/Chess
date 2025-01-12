@@ -59,7 +59,9 @@ int main ()
 	}
 	
 	Sounds::UnloadContent();
+	Piece::UnloadContent();
 	Pawn::UnloadContent();
+	delete board;
 
 	CloseWindow();
 	return 0;

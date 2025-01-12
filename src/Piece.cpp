@@ -14,6 +14,16 @@ Piece::Piece(Vector2 pos, bool isWhite, int id) : pos(pos), isWhite(isWhite), id
     rect = {pos.x * Board::tilesize, pos.y * Board::tilesize, Board::tilesize, Board::tilesize};
 }
 
+Piece::~Piece() {}
+
+void Piece::UnloadContent()
+{
+    for(Piece* piece : pieces)
+    {
+        delete piece;
+    }
+}
+
 void Piece::Update()
 {
     pos.x = clamp((int)pos.x, 0, 7);
@@ -21,6 +31,8 @@ void Piece::Update()
     rect = {pos.x * Board::tilesize, pos.y * Board::tilesize, Board::tilesize, Board::tilesize};
     
     chessPos = ChessNotation::VecToCharInt(pos);
+    
+    
 }
 
 void Piece::Draw()
@@ -29,6 +41,24 @@ void Piece::Draw()
     {
         string posString = "(" + string(1, chessPos.first) + to_string(chessPos.second) + ")";
         DrawText(posString.c_str(), (int)((pos.x * Board::tilesize) + 50), (int)((pos.y * Board::tilesize)), 20, BLACK);
+    }
+}
+
+
+//TODO: FIX THIS METHOD
+void Piece::CheckAvailablePositions(Piece* piece)
+{
+    for (Piece* allPieces : pieces) {
+        if (allPieces != piece) {
+            piece->availablePositions.erase(
+                std::remove_if(
+                    piece->availablePositions.begin(),
+                    piece->availablePositions.end(),
+                    [&](const Vector2& avPosition) {
+                        return allPieces->pos.x == avPosition.x && allPieces->pos.y == avPosition.y;
+                    }),
+                piece->availablePositions.end());
+        }
     }
 }
 
@@ -50,8 +80,17 @@ bool Piece::CanMoveTo(Piece* piece, Vector2 position, int id)
             return false;
         }
     }
+    
+    bool found = false;
+    for(Vector2 avPosition : piece->availablePositions)
+    {
+        if (position.x == avPosition.x && position.y == avPosition.y) {
+            found = true;
+            break;  // Found a match, no need to continue checking
+        }
+    }
 
-    return true;
+    return found;
 }
 
 void Piece::MoveTo(Piece* piece, Vector2 position, int id)

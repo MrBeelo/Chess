@@ -7,6 +7,8 @@
 #include <string>
 
 Board::Board(Vector2 size) : size(size) {}
+Board::~Board() {}
+
 void Board::Update()
 {
     Vector2 mouse = GetMousePosition();
@@ -14,6 +16,7 @@ void Board::Update()
     if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
     {
         Vector2 prevClickPos = clickedPos;
+        
         if(prevClickPos.x == -1 && prevClickPos.y == -1)
         {
             clickedPos = {floor(mouse.x / tilesize), floor(mouse.y / tilesize)};
@@ -66,6 +69,21 @@ void Board::Draw()
                 } else {
                     color = WHITE;
                 }
+                
+                for(Piece* piece : Piece::pieces)
+                {
+                    if(clickedPos.x == piece->pos.x && clickedPos.y == piece->pos.y)
+                    {
+                        for (Vector2 avPosition : piece->availablePositions) 
+                        {
+                            if (x == avPosition.x && y == avPosition.y) 
+                            {
+                                color = BLUE; // Highlight available positions
+                                break; 
+                            }
+                        }
+                    }
+                }
             } else {
                 if(clickedPos.x == x && clickedPos.y == y)
                 {
@@ -75,6 +93,21 @@ void Board::Draw()
                     color = MAROON;
                 } else {
                     color = GREEN;
+                }
+                
+                for(Piece* piece : Piece::pieces)
+                {
+                    if(clickedPos.x == piece->pos.x && clickedPos.y == piece->pos.y)
+                    {
+                        for (Vector2 avPosition : piece->availablePositions) 
+                        {
+                            if (x == avPosition.x && y == avPosition.y) 
+                            {
+                                color = DARKBLUE; // Highlight available positions
+                                break; 
+                            }
+                        }
+                    }
                 }
             }
             DrawRectangle(x * tilesize, y * tilesize, tilesize, tilesize, color);

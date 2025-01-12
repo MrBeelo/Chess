@@ -12,6 +12,7 @@ class Board
     Vector2 clickedPos = {-1, -1};
     Vector2 clickedMark = {-1, -1};
     Board(Vector2 size);
+    ~Board();
     void Update();
     void Draw();
 };
