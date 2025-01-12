@@ -1,8 +1,9 @@
 #include "headers/Board.h"
+#include "headers/ChessNotation.h"
+#include "headers/Globals.h"
 #include "headers/Piece.h"
+#include "headers/raylib.h"
 #include <cmath>
-#include <ostream>
-#include <sstream>
 #include <string>
 
 Board::Board(Vector2 size) : size(size) {}
@@ -77,15 +78,19 @@ void Board::Draw()
                 }
             }
             DrawRectangle(x * tilesize, y * tilesize, tilesize, tilesize, color);
+            if(Globals::f3On)
+            {
+                string chessPos = string(1, ChessNotation::VecToCharInt({(float)x, (float)y}).first) + to_string(ChessNotation::VecToCharInt({(float)x, (float)y}).second);
+                DrawText(chessPos.c_str(), x * tilesize, y * tilesize, 10, BLACK); 
+            }
         }
     }
     
-    ostringstream oss;
-    ostringstream oss2;
-    oss << "(" << clickedPos.x << ", " << clickedPos.y << ")";
-    oss2 << "(" << GetMousePosition().x << ", " << GetMousePosition().y << ")";
-    string posString = oss.str();
-    string posString2 = oss2.str();
-    DrawText(posString.c_str(), 10, 10, 20, BLACK);
-    DrawText(posString2.c_str(), 10, 40, 20, BLACK);
+    if(Globals::f3On)
+    {
+        string posString = "(" + to_string(static_cast<int>(clickedPos.x)) + ", " + to_string(static_cast<int>(clickedPos.y)) + ")";
+        string posString2 = "(" + to_string(static_cast<int>(GetMousePosition().x)) + ", " + to_string(static_cast<int>(GetMousePosition().y)) + ")";
+        DrawText(posString.c_str(), 10, 10, 20, BLACK);
+        DrawText(posString2.c_str(), 10, 40, 20, BLACK);
+    }
 }

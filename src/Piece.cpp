@@ -1,11 +1,10 @@
 #include "headers/Board.h"
 #include "headers/Piece.h"
+#include "headers/ChessNotation.h"
+#include "headers/Globals.h"
 #include "headers/Sounds.h"
 #include <algorithm>
 #include <cmath>
-#include <iostream>
-#include <ostream>
-#include <sstream>
 #include <string>
 
 vector<Piece*> Piece::pieces;
@@ -20,14 +19,17 @@ void Piece::Update()
     pos.x = clamp((int)pos.x, 0, 7);
     pos.y = clamp((int)pos.y, 0, 7);
     rect = {pos.x * Board::tilesize, pos.y * Board::tilesize, Board::tilesize, Board::tilesize};
+    
+    chessPos = ChessNotation::VecToCharInt(pos);
 }
 
 void Piece::Draw()
 {
-    ostringstream oss;
-    oss << "(" << pos.x << ", " << pos.y << "), " << id;
-    std::string posString = oss.str();
-    DrawText(posString.c_str(), (int)((pos.x * Board::tilesize) + 50), (int)((pos.y * Board::tilesize)), 20, BLACK);
+    if(Globals::f3On)
+    {
+        string posString = "(" + string(1, chessPos.first) + to_string(chessPos.second) + ")";
+        DrawText(posString.c_str(), (int)((pos.x * Board::tilesize) + 50), (int)((pos.y * Board::tilesize)), 20, BLACK);
+    }
 }
 
 bool Piece::CanMoveTo(Piece* piece, Vector2 position, int id)
@@ -65,9 +67,7 @@ void Piece::MoveTo(Piece* piece, Vector2 position, int id)
 
 void Piece::MoveTo(Piece* piece, char file, int rank, int id)
 {
-    float x = file - 'A';
-    float y = 7 - (rank - 1);
-    Vector2 position = {x, y};
+    Vector2 position = ChessNotation::CharIntToVec(file, rank);
     
     if (CanMoveTo(piece, position, id)) 
     {
