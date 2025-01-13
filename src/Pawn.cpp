@@ -43,6 +43,7 @@ void Pawn::Update()
     Piece::Update(); 
     
     availablePositions.clear();
+    
     int yDir = isWhite ? -1 : 1;
     
     availablePositions.push_back({pos.x, pos.y + yDir});
@@ -51,7 +52,7 @@ void Pawn::Update()
         availablePositions.push_back({pos.x, pos.y + (yDir * 2)});
     }
     
-    Piece::CheckAvailablePositions(this);
+    Piece::RemoveBlockedPositions(this);
 }
 
 void Pawn::Draw()

@@ -44,23 +44,75 @@ void Piece::Draw()
     }
 }
 
-
-//TODO: FIX THIS METHOD
-void Piece::CheckAvailablePositions(Piece* piece)
-{
-    for (Piece* allPieces : pieces) {
-        if (allPieces != piece) {
-            piece->availablePositions.erase(
-                std::remove_if(
-                    piece->availablePositions.begin(),
-                    piece->availablePositions.end(),
-                    [&](const Vector2& avPosition) {
-                        return allPieces->pos.x == avPosition.x && allPieces->pos.y == avPosition.y;
-                    }),
-                piece->availablePositions.end());
+void Piece::RemoveBlockedPositions(Piece* piece) {
+    for (Piece* otherPiece : pieces) {
+        if (otherPiece != piece) {
+            // Check for blocking in all 8 directions
+            
+            if (otherPiece->pos.x == piece->pos.x && otherPiece->pos.y > piece->pos.y) { // Up
+                // Remove positions above
+                RemovePositionsInDirection(piece, otherPiece, 1, 0); 
+            } 
+            
+            if (otherPiece->pos.x == piece->pos.x && otherPiece->pos.y < piece->pos.y) { // Down
+                // Remove positions below
+                RemovePositionsInDirection(piece, otherPiece, -1, 0); 
+            } 
+            
+            if (otherPiece->pos.y == piece->pos.y && otherPiece->pos.x > piece->pos.x) { // Right
+                // Remove positions to the right
+                RemovePositionsInDirection(piece, otherPiece, 0, 1); 
+            } 
+            
+            if (otherPiece->pos.y == piece->pos.y && otherPiece->pos.x < piece->pos.x) { // Left
+                // Remove positions to the left
+                RemovePositionsInDirection(piece, otherPiece, 0, -1); 
+            } 
+            
+            if (otherPiece->pos.x > piece->pos.x && otherPiece->pos.y > piece->pos.y) { // Up-Right
+                // Remove positions up-right
+                RemovePositionsInDirection(piece, otherPiece, 1, 1); 
+            } 
+            
+            if (otherPiece->pos.x > piece->pos.x && otherPiece->pos.y < piece->pos.y) { // Down-Right
+                // Remove positions down-right
+                RemovePositionsInDirection(piece, otherPiece, -1, 1); 
+            } 
+            
+            if (otherPiece->pos.x < piece->pos.x && otherPiece->pos.y > piece->pos.y) { // Up-Left
+                // Remove positions up-left
+                RemovePositionsInDirection(piece, otherPiece, 1, -1); 
+            } 
+            
+            if (otherPiece->pos.x < piece->pos.x && otherPiece->pos.y < piece->pos.y) { // Down-Left
+                // Remove positions down-left
+                RemovePositionsInDirection(piece, otherPiece, -1, -1); 
+            }
         }
     }
 }
+
+void Piece::RemovePositionsInDirection(Piece* piece, Piece* otherPiece, int yDirection, int xDirection) {
+    for (int i = 1; i < 8; i++)
+    {
+        RemovePosition(piece, otherPiece->pos.x + xDirection, otherPiece->pos.y + yDirection);
+    }
+}
+
+void Piece::RemovePosition(Piece* piece, int x, int y) {
+    // Iterate through available positions to find and remove the specified position
+    for (auto it = piece->availablePositions.begin(); it != piece->availablePositions.end(); ++it) {
+        // Compare the position with the current position (x, y)
+        if (it->x == x && it->y == y) {
+            // Remove the position from the list
+            piece->availablePositions.erase(it);
+            return;  // Exit after removing the first match
+        }
+    }
+}
+
+
+
 
 bool Piece::CanMoveTo(Piece* piece, Vector2 position, int id)
 {
