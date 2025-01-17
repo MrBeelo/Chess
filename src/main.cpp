@@ -4,6 +4,7 @@
 
 #include "headers/Board.h"
 #include "headers/Pawn.h"
+#include "headers/Knight.h"
 #include "headers/Piece.h"
 #include "headers/Sounds.h"
 #include "headers/Globals.h"
@@ -27,12 +28,18 @@ int main ()
 
 	Sounds::LoadContent();
 	Pawn::LoadContent();
+	Knight::LoadContent();
 	
 	for(int i = 0; i <= 7; i++)
 	{
 	    Pawn::Make(ChessNotation::VecToCharInt({(float)i, 2}).first, 2, true, i);
 		Pawn::Make(ChessNotation::VecToCharInt({(float)i, 7}).first, 7, false, i + 8);
 	}
+	
+	Knight::Make('B', 1, true, 1);
+	Knight::Make('G', 1, true, 2);
+	Knight::Make('B', 8, false, 3);
+	Knight::Make('G', 8, false, 4);
 
 	// game loop
 	while (!WindowShouldClose())
@@ -61,6 +68,7 @@ int main ()
 	Sounds::UnloadContent();
 	Piece::UnloadContent();
 	Pawn::UnloadContent();
+	Knight::UnloadContent();
 	delete board;
 
 	CloseWindow();

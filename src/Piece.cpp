@@ -44,49 +44,55 @@ void Piece::Draw()
     }
 }
 
-void Piece::RemoveBlockedPositions(Piece* piece) {
+void Piece::RemoveBlockedPositions(Piece* piece, bool noclip) {
     for (Piece* otherPiece : pieces) {
         if (otherPiece != piece) {
-            // Check for blocking in all 8 directions
-            
-            if (otherPiece->pos.x == piece->pos.x && otherPiece->pos.y > piece->pos.y) { // Up
-                // Remove positions above
-                RemovePositionsInDirection(piece, otherPiece, 1, 0); 
-            } 
-            
-            if (otherPiece->pos.x == piece->pos.x && otherPiece->pos.y < piece->pos.y) { // Down
-                // Remove positions below
-                RemovePositionsInDirection(piece, otherPiece, -1, 0); 
-            } 
-            
-            if (otherPiece->pos.y == piece->pos.y && otherPiece->pos.x > piece->pos.x) { // Right
-                // Remove positions to the right
-                RemovePositionsInDirection(piece, otherPiece, 0, 1); 
-            } 
-            
-            if (otherPiece->pos.y == piece->pos.y && otherPiece->pos.x < piece->pos.x) { // Left
-                // Remove positions to the left
-                RemovePositionsInDirection(piece, otherPiece, 0, -1); 
-            } 
-            
-            if (otherPiece->pos.x > piece->pos.x && otherPiece->pos.y > piece->pos.y) { // Up-Right
-                // Remove positions up-right
-                RemovePositionsInDirection(piece, otherPiece, 1, 1); 
-            } 
-            
-            if (otherPiece->pos.x > piece->pos.x && otherPiece->pos.y < piece->pos.y) { // Down-Right
-                // Remove positions down-right
-                RemovePositionsInDirection(piece, otherPiece, -1, 1); 
-            } 
-            
-            if (otherPiece->pos.x < piece->pos.x && otherPiece->pos.y > piece->pos.y) { // Up-Left
-                // Remove positions up-left
-                RemovePositionsInDirection(piece, otherPiece, 1, -1); 
-            } 
-            
-            if (otherPiece->pos.x < piece->pos.x && otherPiece->pos.y < piece->pos.y) { // Down-Left
-                // Remove positions down-left
-                RemovePositionsInDirection(piece, otherPiece, -1, -1); 
+            if(!noclip)
+            {
+                if (otherPiece->pos.x == piece->pos.x && otherPiece->pos.y > piece->pos.y) { // Up
+                    // Remove positions above
+                    RemovePositionsInDirection(piece, otherPiece, 1, 0); 
+                } 
+                
+                if (otherPiece->pos.x == piece->pos.x && otherPiece->pos.y < piece->pos.y) { // Down
+                    // Remove positions below
+                    RemovePositionsInDirection(piece, otherPiece, -1, 0); 
+                } 
+                
+                if (otherPiece->pos.y == piece->pos.y && otherPiece->pos.x > piece->pos.x) { // Right
+                    // Remove positions to the right
+                    RemovePositionsInDirection(piece, otherPiece, 0, 1); 
+                } 
+                
+                if (otherPiece->pos.y == piece->pos.y && otherPiece->pos.x < piece->pos.x) { // Left
+                    // Remove positions to the left
+                    RemovePositionsInDirection(piece, otherPiece, 0, -1); 
+                } 
+                
+                if (otherPiece->pos.x > piece->pos.x && otherPiece->pos.y > piece->pos.y) { // Up-Right
+                    // Remove positions up-right
+                    RemovePositionsInDirection(piece, otherPiece, 1, 1); 
+                } 
+                
+                if (otherPiece->pos.x > piece->pos.x && otherPiece->pos.y < piece->pos.y) { // Down-Right
+                    // Remove positions down-right
+                    RemovePositionsInDirection(piece, otherPiece, -1, 1); 
+                } 
+                
+                if (otherPiece->pos.x < piece->pos.x && otherPiece->pos.y > piece->pos.y) { // Up-Left
+                    // Remove positions up-left
+                    RemovePositionsInDirection(piece, otherPiece, 1, -1); 
+                } 
+                
+                if (otherPiece->pos.x < piece->pos.x && otherPiece->pos.y < piece->pos.y) { // Down-Left
+                    // Remove positions down-left
+                    RemovePositionsInDirection(piece, otherPiece, -1, -1); 
+                }
+            }
+
+            if(otherPiece->isWhite == piece->isWhite)
+            {
+                RemovePosition(piece, otherPiece->pos.x, otherPiece->pos.y);
             }
         }
     }
@@ -97,6 +103,10 @@ void Piece::RemovePositionsInDirection(Piece* piece, Piece* otherPiece, int yDir
     {
         RemovePosition(piece, otherPiece->pos.x + xDirection, otherPiece->pos.y + yDirection);
     }
+}
+
+void Piece::AddPosition(Piece* piece, int x, int y) {
+    piece->availablePositions.push_back({(float)x, (float)y});
 }
 
 void Piece::RemovePosition(Piece* piece, int x, int y) {

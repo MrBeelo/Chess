@@ -46,13 +46,18 @@ void Pawn::Update()
     
     int yDir = isWhite ? -1 : 1;
     
-    availablePositions.push_back({pos.x, pos.y + yDir});
+    AddPosition(this, pos.x, pos.y + yDir);
     if((isWhite && pos.y == 6) || (!isWhite && pos.y == 1))
     {
-        availablePositions.push_back({pos.x, pos.y + (yDir * 2)});
+        AddPosition(this, pos.x, pos.y + (yDir * 2));
     }
     
-    Piece::RemoveBlockedPositions(this);
+    Piece::RemoveBlockedPositions(this, false);
+    
+    for(Piece* otherPiece : Piece::pieces)
+    {
+        PawnSpecials(this, otherPiece);
+    }
 }
 
 void Pawn::Draw()
@@ -61,4 +66,24 @@ void Pawn::Draw()
     DrawTexturePro(texture, {0, 0, 150, 150}, rect, {0, 0}, 0, WHITE);
     
     Piece::Draw();
+}
+
+void Pawn::PawnSpecials(Pawn* pawn, Piece* otherPiece)
+{
+    int yDir = pawn->isWhite ? -1 : 1;
+    
+    if(otherPiece->pos.x == pawn->pos.x && otherPiece->pos.y == pawn->pos.y + yDir)
+    {
+        Piece::RemovePosition(pawn, otherPiece->pos.x, otherPiece->pos.y);
+    }
+    
+    if(otherPiece->pos.x == pawn->pos.x + 1 && otherPiece->pos.y == pawn->pos.y + yDir)
+    {
+        Piece::AddPosition(pawn, otherPiece->pos.x, otherPiece->pos.y);
+    }
+    
+    if(otherPiece->pos.x == pawn->pos.x - 1 && otherPiece->pos.y == pawn->pos.y + yDir)
+    {
+        Piece::AddPosition(pawn, otherPiece->pos.x, otherPiece->pos.y);
+    }
 }

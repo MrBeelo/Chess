@@ -24,8 +24,9 @@ class Piece
     static void UnloadContent();
     virtual void Update();
     virtual void Draw();
-    static void RemoveBlockedPositions(Piece* piece);
+    static void RemoveBlockedPositions(Piece* piece, bool noclip);
     static void RemovePositionsInDirection(Piece* piece, Piece* otherPiece, int yDirection, int xDirection);
+    static void AddPosition(Piece* piece, int x, int y);
     static void RemovePosition(Piece* piece, int x, int y);
     static bool CanMoveTo(Piece* piece, Vector2 position, int id);
     static void MoveTo(Piece* piece, Vector2 position, int id);

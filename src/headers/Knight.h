@@ -1,19 +1,19 @@
-#ifndef PAWN_H
-#define PAWN_H
+#ifndef KNIGHT_H
+#define KNIGHT_H
 
 #include "raylib.h"
 #include "Piece.h"
 #include "vector"
 
-class Pawn : public Piece
+class Knight : public Piece
 {
     public:
-    Pawn(Vector2 pos, bool isWhite, int id);
-    ~Pawn();
+    Knight(Vector2 pos, bool isWhite, int id);
+    ~Knight();
     
     static Texture2D textureWhite;
     static Texture2D textureBlack;
-    static vector<Pawn*> pawns;
+    static vector<Knight*> knights;
     
     static void LoadContent();
     static void UnloadContent();
@@ -21,7 +21,6 @@ class Pawn : public Piece
     static void Make(char file, int rank, bool isWhite, int id);
     void Update() override;
     void Draw() override;
-    static void PawnSpecials(Pawn* pawn, Piece* otherPiece);
 };
 
 #endif
