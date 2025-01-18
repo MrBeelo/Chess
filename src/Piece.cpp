@@ -121,8 +121,12 @@ void Piece::RemovePosition(Piece* piece, int x, int y) {
     }
 }
 
-
-
+void Piece::RemovePieceFromVector(Piece* piece) {
+    auto it = std::remove(pieces.begin(), pieces.end(), piece);
+    if (it != pieces.end()) {
+        pieces.erase(it, pieces.end()); // Remove the piece from the vector
+    }
+}
 
 bool Piece::CanMoveTo(Piece* piece, Vector2 position, int id)
 {
@@ -191,5 +195,35 @@ void Piece::MoveBy(Piece* piece, int x, int y, int id)
         piece->pos.y += y;
         
         PlaySound(Sounds::moveSelf);
+    }
+}
+
+void Piece::DeletePiece(Piece* piece)
+{
+    RemovePieceFromVector(piece);
+    delete piece;
+}
+
+void Piece::DeletePiece(Vector2 pos)
+{
+    for(Piece* piece : pieces)
+    {
+        if(piece->pos.x == pos.x && piece->pos.y == pos.y)
+        {
+            DeletePiece(piece);
+        }
+    }
+}
+
+void Piece::DeletePiece(char file, int rank)
+{
+    for(Piece* piece : pieces)
+    {
+        Vector2 pos = ChessNotation::CharIntToVec(file, rank);
+        
+        if(piece->pos.x == pos.x && piece->pos.y == pos.y)
+        {
+            DeletePiece(piece);
+        }
     }
 }
