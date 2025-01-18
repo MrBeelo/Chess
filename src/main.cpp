@@ -5,6 +5,10 @@
 #include "headers/Board.h"
 #include "headers/Pawn.h"
 #include "headers/Knight.h"
+#include "headers/Bishop.h"
+#include "headers/Rook.h"
+#include "headers/Queen.h"
+#include "headers/King.h"
 #include "headers/Piece.h"
 #include "headers/Sounds.h"
 #include "headers/Globals.h"
@@ -29,6 +33,10 @@ int main ()
 	Sounds::LoadContent();
 	Pawn::LoadContent();
 	Knight::LoadContent();
+	Bishop::LoadContent();
+	Rook::LoadContent();
+	Queen::LoadContent();
+	King::LoadContent();
 	
 	for(int i = 0; i <= 7; i++)
 	{
@@ -40,6 +48,22 @@ int main ()
 	Knight::Make('G', 1, true, 2);
 	Knight::Make('B', 8, false, 3);
 	Knight::Make('G', 8, false, 4);
+	
+	Bishop::Make('C', 1, true, 1);
+	Bishop::Make('F', 1, true, 2);
+	Bishop::Make('C', 8, false, 3);
+	Bishop::Make('F', 8, false, 4);
+	
+	Rook::Make('A', 1, true, 1);
+	Rook::Make('H', 1, true, 2);
+	Rook::Make('A', 8, false, 3);
+	Rook::Make('H', 8, false, 4);
+	
+	Queen::Make('D', 1, true, 1);
+	Queen::Make('D', 8, false, 2);
+	
+	King::Make('E', 1, true, 1);
+	King::Make('E', 8, false, 2);
 
 	// game loop
 	while (!WindowShouldClose())
@@ -69,6 +93,11 @@ int main ()
 	Piece::UnloadContent();
 	Pawn::UnloadContent();
 	Knight::UnloadContent();
+	Bishop::UnloadContent();
+	Rook::UnloadContent();
+	Queen::UnloadContent();
+	King::UnloadContent();
+	
 	delete board;
 
 	CloseWindow();

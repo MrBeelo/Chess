@@ -60,10 +60,7 @@ void Board::Draw()
         {
             Color color;
             if(x % 2 == y % 2) {
-                if(clickedPos.x == x && clickedPos.y == y)
-                {
-                    color = BLUE;
-                } else if(clickedMark.x == x && clickedMark.y == y)
+                if(clickedMark.x == x && clickedMark.y == y)
                 {
                     color = RED;
                 } else {
@@ -85,10 +82,7 @@ void Board::Draw()
                     }
                 }
             } else {
-                if(clickedPos.x == x && clickedPos.y == y)
-                {
-                    color = DARKBLUE;
-                } else if(clickedMark.x == x && clickedMark.y == y)
+                if(clickedMark.x == x && clickedMark.y == y)
                 {
                     color = MAROON;
                 } else {

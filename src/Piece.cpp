@@ -101,7 +101,7 @@ void Piece::RemoveBlockedPositions(Piece* piece, bool noclip) {
 void Piece::RemovePositionsInDirection(Piece* piece, Piece* otherPiece, int yDirection, int xDirection) {
     for (int i = 1; i < 8; i++)
     {
-        RemovePosition(piece, otherPiece->pos.x + xDirection, otherPiece->pos.y + yDirection);
+        RemovePosition(piece, otherPiece->pos.x + (xDirection * i), otherPiece->pos.y + (yDirection * i));
     }
 }
 
