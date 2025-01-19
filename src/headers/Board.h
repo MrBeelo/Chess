@@ -17,6 +17,10 @@ class Board
     ~Board();
     void Update();
     void Draw();
+    void SelectPiece();
+    void MovePiece(const Vector2& prevClickPos);
+    void DeselectAll();
+    void ValidateSelection();
 };
 
 #endif

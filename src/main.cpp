@@ -20,9 +20,9 @@ using namespace std;
 int main ()
 {
 	SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
-	Board* board = new Board({8, 8});
-	int windowX = Board::tilesize * board->size.x;
-	int windowY = Board::tilesize * board->size.y;
+	
+	int windowX = Board::tilesize * Globals::board->size.x;
+	int windowY = Board::tilesize * Globals::board->size.y;
 	Globals::f3On = false;
 
 	InitWindow(windowX, windowY, "Chess");
@@ -70,7 +70,7 @@ int main ()
 	{
 	    Globals::Update();
 		
-        board->Update();
+        Globals::board->Update();
 	    for(Piece* piece : Piece::pieces)
 		{
 		    piece->Update();
@@ -79,7 +79,7 @@ int main ()
 		BeginDrawing();
 		ClearBackground(BLACK);
 
-		board->Draw();
+		Globals::board->Draw();
 		
 		for(Piece* piece : Piece::pieces)
 		{
@@ -98,7 +98,7 @@ int main ()
 	Queen::UnloadContent();
 	King::UnloadContent();
 	
-	delete board;
+	delete Globals::board;
 
 	CloseWindow();
 	return 0;

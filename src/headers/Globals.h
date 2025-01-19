@@ -8,8 +8,11 @@
 class Globals
 {
     public:
+    static Board* board;
     static bool f3On;
+    static bool isWhitePlaying;
     static void Update();
+    static void ToggleTurn();
 };
 
 #endif

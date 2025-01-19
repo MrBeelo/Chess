@@ -1,6 +1,7 @@
 #include "headers/Board.h"
 #include "headers/ChessNotation.h"
 #include "headers/Globals.h"
+#include "headers/InputManager.h"
 #include "headers/Piece.h"
 #include "headers/raylib.h"
 #include <cmath>
@@ -13,52 +14,67 @@ void Board::Update()
 {
     Vector2 mouse = GetMousePosition();
 
-    if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
     {
-        Vector2 prevClickPos = clickedPos;
-        
-        if(prevClickPos.x == -1 && prevClickPos.y == -1)
+        InputManager::HandleLeftClick(mouse, clickedPos);
+    }
+
+    if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
+    {
+        InputManager::HandleRightClick(mouse, clickedMark);
+    }
+}
+
+
+void Board::SelectPiece()
+{
+    for (Piece* piece : Piece::pieces)
+    {
+        if (piece->pos.x == clickedPos.x && piece->pos.y == clickedPos.y &&
+            ((Globals::isWhitePlaying && piece->isWhite) || (!Globals::isWhitePlaying && !piece->isWhite)))
         {
-            clickedPos = {floor(mouse.x / tilesize), floor(mouse.y / tilesize)};
-            for(Piece* piece : Piece::pieces)
+            selPos = piece->pos;
+            movedPos = {-1, -1};
+            return;
+        }
+    }
+}
+
+void Board::MovePiece(const Vector2& prevClickPos)
+{
+    for (Piece* piece : Piece::pieces)
+    {
+        for(Vector2 avPosition : piece->availablePositions)
+        {
+            if (piece->pos.x == prevClickPos.x && piece->pos.y == prevClickPos.y && avPosition.x == clickedPos.x && avPosition.y == clickedPos.y)
             {
-                if(piece->pos.x == clickedPos.x && piece->pos.y == clickedPos.y)
-                {
-                    selPos = piece->pos;
-                    movedPos = {-1, -1};
-                }
-            }
-        } else {
-            clickedPos = {floor(mouse.x / tilesize), floor(mouse.y / tilesize)};
-            if(prevClickPos.x == clickedPos.x && prevClickPos.y == clickedPos.y)
-            {
-                clickedPos = {floor(mouse.x / tilesize), floor(mouse.y / tilesize)};
+                Piece::MoveTo(piece, clickedPos, piece->id);
+                movedPos = clickedPos;
                 clickedPos = {-1, -1};
-                clickedMark = {-1, -1};
-                selPos = {-1, -1};
-                movedPos = {-1, -1};
-            } else {
-                for(Piece* piece : Piece::pieces)
-                {
-                    if(piece->pos.x == prevClickPos.x && piece->pos.y == prevClickPos.y)
-                    {
-                        clickedPos = {floor(mouse.x / tilesize), floor(mouse.y / tilesize)};
-                        Piece::MoveTo(piece, clickedPos, piece->id);
-                        movedPos = clickedPos;
-                        clickedPos = {-1, -1};
-                    }
-                }
+                Globals::ToggleTurn();
+                return;
             }
         }
     }
+}
 
-    if(IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
+void Board::DeselectAll()
+{
+    clickedPos = {-1, -1};
+    clickedMark = {-1, -1};
+    selPos = {-1, -1};
+    movedPos = {-1, -1};
+}
+
+void Board::ValidateSelection()
+{
+    for (Piece* piece : Piece::pieces)
     {
-        Vector2 prevClickMark = clickedMark;
-        clickedMark = {floor(mouse.x / tilesize), floor(mouse.y / tilesize)};
-        if(prevClickMark.x == clickedMark.x && prevClickMark.y == clickedMark.y)
+        if (piece->pos.x == clickedPos.x && piece->pos.y == clickedPos.y &&
+            ((Globals::isWhitePlaying && !piece->isWhite) || (!Globals::isWhitePlaying && piece->isWhite)))
         {
-            clickedMark = {-1, -1};
+            DeselectAll();
+            return;
         }
     }
 }
