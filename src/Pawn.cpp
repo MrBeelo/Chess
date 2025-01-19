@@ -1,4 +1,5 @@
 #include "headers/Pawn.h"
+#include "headers/Queen.h"
 #include "headers/ChessNotation.h"
 
 Texture2D Pawn::textureWhite;
@@ -58,6 +59,8 @@ void Pawn::Update()
     {
         PawnSpecials(this, otherPiece);
     }
+    
+    Promotion(this);
 }
 
 void Pawn::Draw()
@@ -85,5 +88,16 @@ void Pawn::PawnSpecials(Pawn* pawn, Piece* otherPiece)
     if(otherPiece->pos.x == pawn->pos.x - 1 && otherPiece->pos.y == pawn->pos.y + yDir)
     {
         Piece::AddPosition(pawn, otherPiece->pos.x, otherPiece->pos.y);
+    }
+}
+
+void Pawn::Promotion(Pawn* pawn)
+{
+    if((pawn->isWhite && ChessNotation::VecToCharInt(pawn->pos).second == 8) || (!pawn->isWhite && ChessNotation::VecToCharInt(pawn->pos).second == 1))
+    {
+        bool isPromoWhite = pawn->isWhite;
+        Vector2 promoPos = pawn->pos;
+        Piece::DeletePiece(pawn);
+        Queen::Make(promoPos, isPromoWhite, Queen::queens.size() + 1);
     }
 }

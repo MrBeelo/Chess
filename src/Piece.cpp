@@ -130,33 +130,37 @@ void Piece::RemovePieceFromVector(Piece* piece) {
 
 bool Piece::CanMoveTo(Piece* piece, Vector2 position, int id)
 {
-    // Check boundaries
     if (position.x < 0 || position.x > 7 || position.y < 0 || position.y > 7) {
         return false;
     }
 
-    // Ensure the piece id matches
     if (piece->id != id) {
         return false;
     }
 
-    // Ensure the target position is not occupied by another piece
-    for (Piece* allPieces : pieces) {
-        if (allPieces != piece && allPieces->pos.x == position.x && allPieces->pos.y == position.y) {
-            return false;
-        }
-    }
-    
     bool found = false;
-    for(Vector2 avPosition : piece->availablePositions)
-    {
+    for (Vector2 avPosition : piece->availablePositions) {
         if (position.x == avPosition.x && position.y == avPosition.y) {
             found = true;
-            break;  // Found a match, no need to continue checking
+            break;
+        }
+    }
+    if (!found) {
+        return false;
+    }
+
+    for (Piece* otherPiece : pieces) {
+        if (otherPiece != piece && otherPiece->pos.x == position.x && otherPiece->pos.y == position.y) {
+            if (otherPiece->isWhite != piece->isWhite) {
+                DeletePiece(otherPiece);
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 
-    return found;
+    return true;
 }
 
 void Piece::MoveTo(Piece* piece, Vector2 position, int id)

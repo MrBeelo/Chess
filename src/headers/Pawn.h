@@ -22,6 +22,7 @@ class Pawn : public Piece
     void Update() override;
     void Draw() override;
     static void PawnSpecials(Pawn* pawn, Piece* otherPiece);
+    static void Promotion(Pawn* pawn);
 };
 
 #endif
