@@ -5,7 +5,7 @@ Texture2D Queen::textureWhite;
 Texture2D Queen::textureBlack;
 vector<Queen*> Queen::queens;
 
-Queen::Queen(Vector2 pos, bool isWhite, int id) : Piece(pos, isWhite, id) {}
+Queen::Queen(Vector2 pos, bool isWhite, int id) : Piece(PieceType::QUEEN, pos, isWhite, id) {}
 Queen::~Queen() {}
 
 void Queen::LoadContent()

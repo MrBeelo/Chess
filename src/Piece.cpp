@@ -9,7 +9,7 @@
 
 vector<Piece*> Piece::pieces;
 
-Piece::Piece(Vector2 pos, bool isWhite, int id) : pos(pos), isWhite(isWhite), id(id)
+Piece::Piece(PieceType type, Vector2 pos, bool isWhite, int id) : pieceType(type), pos(pos), isWhite(isWhite), id(id)
 {
     rect = {pos.x * Board::tilesize, pos.y * Board::tilesize, Board::tilesize, Board::tilesize};
 }

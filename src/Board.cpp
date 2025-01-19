@@ -3,6 +3,7 @@
 #include "headers/Globals.h"
 #include "headers/InputManager.h"
 #include "headers/Piece.h"
+#include "headers/King.h"
 #include "headers/raylib.h"
 #include <cmath>
 #include <string>
@@ -48,10 +49,22 @@ void Board::MovePiece(const Vector2& prevClickPos)
         {
             if (piece->pos.x == prevClickPos.x && piece->pos.y == prevClickPos.y && avPosition.x == clickedPos.x && avPosition.y == clickedPos.y)
             {
+                if(piece->pieceType == PieceType::KING)
+                {
+                    for(Rook* rook : Rook::rooks)
+                    {
+                        pair<char, int> rookPos = ChessNotation::VecToCharInt(rook->pos);
+                        if((rookPos.first == 'H' && clickedPos.x == piece->pos.x + 2) || (rookPos.first == 'A' && clickedPos.x == piece->pos.x - 2))
+                        {
+                            King::Castle(rook);
+                        }
+                    }
+                }
                 Piece::MoveTo(piece, clickedPos, piece->id);
                 movedPos = clickedPos;
                 clickedPos = {-1, -1};
                 Globals::ToggleTurn();
+                piece->hasMoved = true;
                 return;
             }
         }

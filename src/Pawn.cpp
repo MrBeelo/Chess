@@ -6,7 +6,7 @@ Texture2D Pawn::textureWhite;
 Texture2D Pawn::textureBlack;
 vector<Pawn*> Pawn::pawns;
 
-Pawn::Pawn(Vector2 pos, bool isWhite, int id) : Piece(pos, isWhite, id) {}
+Pawn::Pawn(Vector2 pos, bool isWhite, int id) : Piece(PieceType::PAWN, pos, isWhite, id) {}
 Pawn::~Pawn() {}
 
 void Pawn::LoadContent()

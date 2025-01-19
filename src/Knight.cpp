@@ -1,11 +1,12 @@
 #include "headers/Knight.h"
 #include "headers/ChessNotation.h"
+#include "headers/Piece.h"
 
 Texture2D Knight::textureWhite;
 Texture2D Knight::textureBlack;
 vector<Knight*> Knight::knights;
 
-Knight::Knight(Vector2 pos, bool isWhite, int id) : Piece(pos, isWhite, id) {}
+Knight::Knight(Vector2 pos, bool isWhite, int id) : Piece(PieceType::KNIGHT, pos, isWhite, id) {}
 Knight::~Knight() {}
 
 void Knight::LoadContent()

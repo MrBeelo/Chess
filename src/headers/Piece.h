@@ -3,6 +3,7 @@
 
 #include "raylib.h"
 #include "Board.h"
+#include "PieceType.h"
 #include "vector"
 
 using namespace std;
@@ -11,14 +12,16 @@ class Piece
 {
     public:
     Vector2 pos;
+    PieceType pieceType;
     pair<char, int> chessPos;
     Rectangle rect = {pos.x * Board::tilesize, pos.y * Board::tilesize, 75, 75};
     bool isWhite;
     int id;
+    bool hasMoved = false;
     static vector<Piece*> pieces;
     vector<Vector2> availablePositions;
     
-    Piece(Vector2 pos, bool isWhite, int id);
+    Piece(PieceType type, Vector2 pos, bool isWhite, int id);
     virtual ~Piece();
     
     static void UnloadContent();

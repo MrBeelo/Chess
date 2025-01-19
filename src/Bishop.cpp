@@ -5,7 +5,7 @@ Texture2D Bishop::textureWhite;
 Texture2D Bishop::textureBlack;
 vector<Bishop*> Bishop::bishops;
 
-Bishop::Bishop(Vector2 pos, bool isWhite, int id) : Piece(pos, isWhite, id) {}
+Bishop::Bishop(Vector2 pos, bool isWhite, int id) : Piece(PieceType::BISHOP, pos, isWhite, id) {}
 Bishop::~Bishop() {}
 
 void Bishop::LoadContent()

@@ -3,6 +3,7 @@
 
 #include "raylib.h"
 #include "Piece.h"
+#include "Rook.h"
 #include "vector"
 
 class King : public Piece
@@ -21,6 +22,9 @@ class King : public Piece
     static void Make(char file, int rank, bool isWhite, int id);
     void Update() override;
     void Draw() override;
+    static void Castle(Rook* rook);
+    bool CanCastleShort(King* king, Rook* rook);
+    bool CanCastleLong(King* king, Rook* rook);
 };
 
 #endif

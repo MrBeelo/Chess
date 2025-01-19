@@ -5,7 +5,7 @@ Texture2D Rook::textureWhite;
 Texture2D Rook::textureBlack;
 vector<Rook*> Rook::rooks;
 
-Rook::Rook(Vector2 pos, bool isWhite, int id) : Piece(pos, isWhite, id) {}
+Rook::Rook(Vector2 pos, bool isWhite, int id) : Piece(PieceType::ROOK, pos, isWhite, id) {}
 Rook::~Rook() {}
 
 void Rook::LoadContent()
