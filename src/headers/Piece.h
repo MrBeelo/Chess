@@ -11,8 +11,8 @@ using namespace std;
 class Piece
 {
     public:
-    Vector2 pos;
     PieceType pieceType;
+    Vector2 pos;
     pair<char, int> chessPos;
     Rectangle rect = {pos.x * Board::tilesize, pos.y * Board::tilesize, 75, 75};
     bool isWhite;
