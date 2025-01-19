@@ -89,6 +89,11 @@ void Pawn::PawnSpecials(Pawn* pawn, Piece* otherPiece)
     {
         Piece::AddPosition(pawn, otherPiece->pos.x, otherPiece->pos.y);
     }
+    
+    if(otherPiece->isWhite == pawn->isWhite)
+    {
+        RemovePosition(pawn, otherPiece->pos.x, otherPiece->pos.y);
+    }
 }
 
 void Pawn::Promotion(Pawn* pawn)

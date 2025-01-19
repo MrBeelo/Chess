@@ -20,6 +20,14 @@ void Board::Update()
         if(prevClickPos.x == -1 && prevClickPos.y == -1)
         {
             clickedPos = {floor(mouse.x / tilesize), floor(mouse.y / tilesize)};
+            for(Piece* piece : Piece::pieces)
+            {
+                if(piece->pos.x == clickedPos.x && piece->pos.y == clickedPos.y)
+                {
+                    selPos = piece->pos;
+                    movedPos = {-1, -1};
+                }
+            }
         } else {
             clickedPos = {floor(mouse.x / tilesize), floor(mouse.y / tilesize)};
             if(prevClickPos.x == clickedPos.x && prevClickPos.y == clickedPos.y)
@@ -27,6 +35,8 @@ void Board::Update()
                 clickedPos = {floor(mouse.x / tilesize), floor(mouse.y / tilesize)};
                 clickedPos = {-1, -1};
                 clickedMark = {-1, -1};
+                selPos = {-1, -1};
+                movedPos = {-1, -1};
             } else {
                 for(Piece* piece : Piece::pieces)
                 {
@@ -34,6 +44,7 @@ void Board::Update()
                     {
                         clickedPos = {floor(mouse.x / tilesize), floor(mouse.y / tilesize)};
                         Piece::MoveTo(piece, clickedPos, piece->id);
+                        movedPos = clickedPos;
                         clickedPos = {-1, -1};
                     }
                 }
@@ -54,6 +65,12 @@ void Board::Update()
 
 void Board::Draw()
 {
+    Color lightSquare = {235, 236, 208, 255};
+    Color darkSquare = {115, 149, 82, 255};
+    Color selLight = {247, 247, 105, 255};
+    Color selDark = {187, 203, 43, 255};
+    Color markLight = {236, 126, 106, 255};
+    Color markDark = {212, 108, 81, 255};
     for(int x = 0; x < size.x; x++)
     {
         for(int y = 0; y < size.y; y++)
@@ -62,15 +79,21 @@ void Board::Draw()
             if(x % 2 == y % 2) {
                 if(clickedMark.x == x && clickedMark.y == y)
                 {
-                    color = RED;
+                    color = markLight;
                 } else {
-                    color = WHITE;
+                    color = lightSquare;
+                }
+                
+                if((selPos.x == x && selPos.y == y) || (movedPos.x == x && movedPos.y == y))
+                {
+                    color = selLight;
                 }
                 
                 for(Piece* piece : Piece::pieces)
                 {
                     if(clickedPos.x == piece->pos.x && clickedPos.y == piece->pos.y)
                     {
+                        //color = selLight;
                         for (Vector2 avPosition : piece->availablePositions) 
                         {
                             if (x == avPosition.x && y == avPosition.y) 
@@ -84,15 +107,21 @@ void Board::Draw()
             } else {
                 if(clickedMark.x == x && clickedMark.y == y)
                 {
-                    color = MAROON;
+                    color = markDark;
                 } else {
-                    color = GREEN;
+                    color = darkSquare;
+                }
+                
+                if((selPos.x == x && selPos.y == y) || (movedPos.x == x && movedPos.y == y))
+                {
+                    color = selDark;
                 }
                 
                 for(Piece* piece : Piece::pieces)
                 {
                     if(clickedPos.x == piece->pos.x && clickedPos.y == piece->pos.y)
                     {
+                        //color = selDark;
                         for (Vector2 avPosition : piece->availablePositions) 
                         {
                             if (x == avPosition.x && y == avPosition.y) 
@@ -117,7 +146,11 @@ void Board::Draw()
     {
         string posString = "(" + to_string(static_cast<int>(clickedPos.x)) + ", " + to_string(static_cast<int>(clickedPos.y)) + ")";
         string posString2 = "(" + to_string(static_cast<int>(GetMousePosition().x)) + ", " + to_string(static_cast<int>(GetMousePosition().y)) + ")";
+        string posString3 = "(" + to_string(static_cast<int>(selPos.x)) + ", " + to_string(static_cast<int>(selPos.y)) + ")";
+        string posString4 = "(" + to_string(static_cast<int>(movedPos.x)) + ", " + to_string(static_cast<int>(movedPos.y)) + ")";
         DrawText(posString.c_str(), 10, 10, 20, BLACK);
         DrawText(posString2.c_str(), 10, 40, 20, BLACK);
+        DrawText(posString3.c_str(), 10, 70, 20, BLACK);
+        DrawText(posString4.c_str(), 10, 100, 20, BLACK);
     }
 }
