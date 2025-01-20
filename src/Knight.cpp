@@ -1,6 +1,7 @@
 #include "headers/Knight.h"
 #include "headers/ChessNotation.h"
 #include "headers/Piece.h"
+#include <algorithm>
 
 Texture2D Knight::textureWhite;
 Texture2D Knight::textureBlack;
@@ -37,6 +38,13 @@ void Knight::Make(char file, int rank, bool isWhite, int id)
     Vector2 pos = ChessNotation::CharIntToVec(file, rank);
     
     Make(pos, isWhite, id);
+}
+
+void Knight::RemovePieceFromVector(Knight* knight) {
+    auto it = remove(knights.begin(), knights.end(), knight);
+    if (it != knights.end()) {
+        knights.erase(it, knights.end()); // Remove the piece from the vector
+    }
 }
 
 void Knight::Update()

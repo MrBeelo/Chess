@@ -1,10 +1,15 @@
 #include "headers/King.h"
+#include "headers/Piece.h"
 #include "headers/Rook.h"
 #include "headers/ChessNotation.h"
+#include "headers/raylib.h"
+#include <algorithm>
 
 Texture2D King::textureWhite;
 Texture2D King::textureBlack;
 vector<King*> King::kings;
+
+using namespace std;
 
 King::King(Vector2 pos, bool isWhite, int id) : Piece(PieceType::KING, pos, isWhite, id) {}
 King::~King() {}
@@ -37,6 +42,13 @@ void King::Make(char file, int rank, bool isWhite, int id)
     Vector2 pos = ChessNotation::CharIntToVec(file, rank);
     
     Make(pos, isWhite, id);
+}
+
+void King::RemovePieceFromVector(King* king) {
+    auto it = remove(kings.begin(), kings.end(), king);
+    if (it != kings.end()) {
+        kings.erase(it, kings.end()); // Remove the piece from the vector
+    }
 }
 
 void King::Update()
@@ -101,3 +113,56 @@ void King::Castle(Rook* rook)
         Rook::MoveTo(rook, 'D', rookPos.second, rook->id);
     }
 }
+
+bool King::IsChecked()
+{
+    for(Piece* piece : Piece::pieces)
+    {
+        for(Vector2 avPosition : piece->availablePositions)
+        {
+            if(pos.x == avPosition.x && pos.y == avPosition.y && piece->isWhite != isWhite)
+            {
+                return true;
+            }
+        }
+    }
+    
+    return false;
+}
+
+bool King::IsChecked(Vector2 hypPos)
+{
+    for(Piece* piece : Piece::pieces)
+    {
+        for(Vector2 avPosition : piece->availablePositions)
+        {
+            if(hypPos.x == avPosition.x && hypPos.y == avPosition.y && piece->isWhite != isWhite && piece->pieceType != PieceType::KING)
+            {
+                return true;
+            }
+        }
+    }
+    
+    return false;
+}
+
+/*bool King::IsMated()
+{
+    if (!IsChecked()) 
+    {
+        return false; // Not in check, not mated
+    }
+
+    bool hasSafeMove = false; 
+
+    for (Vector2 avPosition : availablePositions) 
+    {
+        if (!IsChecked(avPosition)) 
+        {
+            hasSafeMove = true; 
+            break; // Break the loop as soon as a safe move is found
+        }
+    }
+
+    return !hasSafeMove; 
+}*/

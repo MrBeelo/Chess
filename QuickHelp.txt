@@ -12,6 +12,5 @@ git push origin main (to push, with main being the branch name)
 
 Todo:
 
-* Add checking
 * Add en passant
 * Add checkmates

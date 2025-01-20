@@ -20,11 +20,15 @@ class King : public Piece
     static void UnloadContent();
     static void Make(Vector2 pos, bool isWhite, int id);
     static void Make(char file, int rank, bool isWhite, int id);
+    static void RemovePieceFromVector(King* king);
     void Update() override;
     void Draw() override;
     static void Castle(Rook* rook);
     bool CanCastleShort(King* king, Rook* rook);
     bool CanCastleLong(King* king, Rook* rook);
+    bool IsChecked();
+    bool IsChecked(Vector2 pos);
+    bool IsMated();
 };
 
 #endif

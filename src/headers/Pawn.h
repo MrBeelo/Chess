@@ -19,6 +19,7 @@ class Pawn : public Piece
     static void UnloadContent();
     static void Make(Vector2 pos, bool isWhite, int id);
     static void Make(char file, int rank, bool isWhite, int id);
+    static void RemovePieceFromVector(Pawn* pawn);
     void Update() override;
     void Draw() override;
     static void PawnSpecials(Pawn* pawn, Piece* otherPiece);

@@ -1,6 +1,7 @@
 #include "headers/Pawn.h"
 #include "headers/Queen.h"
 #include "headers/ChessNotation.h"
+#include <algorithm>
 
 Texture2D Pawn::textureWhite;
 Texture2D Pawn::textureBlack;
@@ -37,6 +38,13 @@ void Pawn::Make(char file, int rank, bool isWhite, int id)
     Vector2 pos = ChessNotation::CharIntToVec(file, rank);
     
     Make(pos, isWhite, id);
+}
+
+void Pawn::RemovePieceFromVector(Pawn* pawn) {
+    auto it = remove(pawns.begin(), pawns.end(), pawn);
+    if (it != pawns.end()) {
+        pawns.erase(it, pawns.end()); // Remove the piece from the vector
+    }
 }
 
 void Pawn::Update()

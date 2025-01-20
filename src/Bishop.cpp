@@ -1,5 +1,7 @@
 #include "headers/Bishop.h"
 #include "headers/ChessNotation.h"
+#include <algorithm>
+
 
 Texture2D Bishop::textureWhite;
 Texture2D Bishop::textureBlack;
@@ -36,6 +38,13 @@ void Bishop::Make(char file, int rank, bool isWhite, int id)
     Vector2 pos = ChessNotation::CharIntToVec(file, rank);
     
     Make(pos, isWhite, id);
+}
+
+void Bishop::RemovePieceFromVector(Bishop* bishop) {
+    auto it = remove(bishops.begin(), bishops.end(), bishop);
+    if (it != bishops.end()) {
+        bishops.erase(it, bishops.end()); // Remove the piece from the vector
+    }
 }
 
 void Bishop::Update()

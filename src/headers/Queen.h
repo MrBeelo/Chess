@@ -19,6 +19,7 @@ class Queen : public Piece
     static void UnloadContent();
     static void Make(Vector2 pos, bool isWhite, int id);
     static void Make(char file, int rank, bool isWhite, int id);
+    static void RemovePieceFromVector(Queen* queen);
     void Update() override;
     void Draw() override;
 };

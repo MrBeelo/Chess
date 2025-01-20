@@ -2,7 +2,14 @@
 #include "headers/Piece.h"
 #include "headers/ChessNotation.h"
 #include "headers/Globals.h"
+#include "headers/Pawn.h"
 #include "headers/Sounds.h"
+#include "headers/Pawn.h"
+#include "headers/Knight.h"
+#include "headers/Bishop.h"
+#include "headers/Rook.h"
+#include "headers/Queen.h"
+#include "headers/King.h"
 #include <algorithm>
 #include <cmath>
 #include <string>
@@ -122,7 +129,7 @@ void Piece::RemovePosition(Piece* piece, int x, int y) {
 }
 
 void Piece::RemovePieceFromVector(Piece* piece) {
-    auto it = std::remove(pieces.begin(), pieces.end(), piece);
+    auto it = remove(pieces.begin(), pieces.end(), piece);
     if (it != pieces.end()) {
         pieces.erase(it, pieces.end()); // Remove the piece from the vector
     }
@@ -204,9 +211,73 @@ void Piece::MoveBy(Piece* piece, int x, int y, int id)
 
 void Piece::DeletePiece(Piece* piece)
 {
-    RemovePieceFromVector(piece);
-    delete piece;
+    RemovePieceFromVector(piece); // Remove the piece from the generic vector
+
+    // Handle specific piece types
+    switch (piece->pieceType)
+    {
+        case PieceType::PAWN:
+        {
+            Pawn* pawn = dynamic_cast<Pawn*>(piece);
+            if (pawn)
+            {
+                Pawn::RemovePieceFromVector(pawn);
+            }
+            break;
+        }
+        case PieceType::KNIGHT:
+        {
+            Knight* knight = dynamic_cast<Knight*>(piece);
+            if (knight)
+            {
+                Knight::RemovePieceFromVector(knight);
+            }
+            break;
+        }
+        case PieceType::BISHOP:
+        {
+            Bishop* bishop = dynamic_cast<Bishop*>(piece);
+            if (bishop)
+            {
+                Bishop::RemovePieceFromVector(bishop);
+            }
+            break;
+        }
+        case PieceType::ROOK:
+        {
+            Rook* rook = dynamic_cast<Rook*>(piece);
+            if (rook)
+            {
+                Rook::RemovePieceFromVector(rook);
+            }
+            break;
+        }
+        case PieceType::QUEEN:
+        {
+            Queen* queen = dynamic_cast<Queen*>(piece);
+            if (queen)
+            {
+                Queen::RemovePieceFromVector(queen);
+            }
+            break;
+        }
+        case PieceType::KING:
+        {
+            King* king = dynamic_cast<King*>(piece);
+            if (king)
+            {
+                King::RemovePieceFromVector(king);
+            }
+            break;
+        }
+        default:
+            // Handle unknown or invalid piece types, if necessary
+            break;
+    }
+
+    delete piece; // Delete the piece safely
 }
+
 
 void Piece::DeletePiece(Vector2 pos)
 {

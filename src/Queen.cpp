@@ -1,5 +1,6 @@
 #include "headers/Queen.h"
 #include "headers/ChessNotation.h"
+#include <algorithm>
 
 Texture2D Queen::textureWhite;
 Texture2D Queen::textureBlack;
@@ -36,6 +37,13 @@ void Queen::Make(char file, int rank, bool isWhite, int id)
     Vector2 pos = ChessNotation::CharIntToVec(file, rank);
     
     Make(pos, isWhite, id);
+}
+
+void Queen::RemovePieceFromVector(Queen* queen) {
+    auto it = remove(queens.begin(), queens.end(), queen);
+    if (it != queens.end()) {
+        queens.erase(it, queens.end()); // Remove the piece from the vector
+    }
 }
 
 void Queen::Update()

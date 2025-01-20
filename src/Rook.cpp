@@ -1,5 +1,6 @@
 #include "headers/Rook.h"
 #include "headers/ChessNotation.h"
+#include <algorithm>
 
 Texture2D Rook::textureWhite;
 Texture2D Rook::textureBlack;
@@ -36,6 +37,13 @@ void Rook::Make(char file, int rank, bool isWhite, int id)
     Vector2 pos = ChessNotation::CharIntToVec(file, rank);
     
     Make(pos, isWhite, id);
+}
+
+void Rook::RemovePieceFromVector(Rook* rook) {
+    auto it = remove(rooks.begin(), rooks.end(), rook);
+    if (it != rooks.end()) {
+        rooks.erase(it, rooks.end()); // Remove the piece from the vector
+    }
 }
 
 void Rook::Update()
