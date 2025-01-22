@@ -1,34 +1,41 @@
 # Variables
 SRC_DIR = src
-OBJ_DIR = obj/desk
+OBJ_DIR = obj/linux
 BUILD_DIR = bin
 ASSETS_DIR = assets
 HEADERS_DIR = $(SRC_DIR)/headers
-LIBRARIES_DIR = lib/desk
+LIBRARIES_DIR = lib/linux
 LIBRARY = $(LIBRARIES_DIR)/libraylib.a
 PROGRAM_NAME = Chess
 EXECUTABLE = $(BUILD_DIR)/$(PROGRAM_NAME)
 CXX = g++
 CXXFLAGS = -Wall -Wextra -std=c++17 -I$(HEADERS_DIR)
-LDFLAGS = -L$(LIBRARIES_DIR) -lraylib
+LDFLAGS = -L $(LIBRARIES_DIR) -lraylib
 
 TARGET_PLATFORM ?= win
 
 ifeq ($(TARGET_PLATFORM), win)
 	BUILD_DIR = bin/win
 	CXX = g++
+	OBJ_DIR = obj/win
+	LIBRARIES_DIR = lib/win
+	LDFLAGS += -lopengl32 -lgdi32 -lwinmm
 	EXECUTABLE = $(BUILD_DIR)/$(PROGRAM_NAME).exe
 endif
 
 ifeq ($(TARGET_PLATFORM), linux)
 	BUILD_DIR = bin/linux
 	CXX = g++
+	OBJ_DIR = obj/linux
+	LIBRARIES_DIR = lib/linux
 	EXECUTABLE = $(BUILD_DIR)/$(PROGRAM_NAME)
 endif
 
 ifeq ($(TARGET_PLATFORM), osx)
 	BUILD_DIR = bin/osx
 	CXX = clang++
+	OBJ_DIR = obj/osx
+	#LIBRARIES_DIR = lib/osx
 	EXECUTABLE = $(BUILD_DIR)/$(PROGRAM_NAME)
 endif
 
