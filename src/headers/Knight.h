@@ -22,6 +22,7 @@ class Knight : public Piece
     static void RemovePieceFromVector(Knight* knight);
     void Update() override;
     void Draw() override;
+    void CalculateKnightMoves();
 };
 
 #endif

@@ -23,10 +23,10 @@ class King : public Piece
     static void RemovePieceFromVector(King* king);
     void Update() override;
     void Draw() override;
+    void CalculateKingMoves();
     static void Castle(Rook* rook);
     bool CanCastleShort(King* king, Rook* rook);
     bool CanCastleLong(King* king, Rook* rook);
-    bool IsChecked();
     bool IsChecked(Vector2 pos);
     bool IsMated();
 };

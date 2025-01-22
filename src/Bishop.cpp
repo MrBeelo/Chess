@@ -51,8 +51,19 @@ void Bishop::Update()
 { 
     Piece::Update(); 
     
-    availablePositions.clear();
+    CalculateAvailablePositions();
+}
+
+void Bishop::Draw()
+{
+    Texture2D texture = isWhite ? textureWhite : textureBlack;
+    DrawTexturePro(texture, {0, 0, 150, 150}, rect, {0, 0}, 0, WHITE);
     
+    Piece::Draw();
+}
+
+void Bishop::CalculateBishopMoves()
+{
     for(int i = 1; i < 8; i++)
     {
         availablePositions.push_back({pos.x + i, pos.y + i});
@@ -62,12 +73,4 @@ void Bishop::Update()
     }
     
     Piece::RemoveBlockedPositions(this, false);
-}
-
-void Bishop::Draw()
-{
-    Texture2D texture = isWhite ? textureWhite : textureBlack;
-    DrawTexturePro(texture, {0, 0, 150, 150}, rect, {0, 0}, 0, WHITE);
-    
-    Piece::Draw();
 }

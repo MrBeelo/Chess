@@ -50,8 +50,19 @@ void Rook::Update()
 { 
     Piece::Update(); 
     
-    availablePositions.clear();
+    CalculateAvailablePositions();
+}
+
+void Rook::Draw()
+{
+    Texture2D texture = isWhite ? textureWhite : textureBlack;
+    DrawTexturePro(texture, {0, 0, 150, 150}, rect, {0, 0}, 0, WHITE);
     
+    Piece::Draw();
+}
+
+void Rook::CalculateRookMoves()
+{
     for(int i = 1; i < 8; i++)
     {
         availablePositions.push_back({pos.x + i, pos.y});
@@ -61,12 +72,4 @@ void Rook::Update()
     }
     
     Piece::RemoveBlockedPositions(this, false);
-}
-
-void Rook::Draw()
-{
-    Texture2D texture = isWhite ? textureWhite : textureBlack;
-    DrawTexturePro(texture, {0, 0, 150, 150}, rect, {0, 0}, 0, WHITE);
-    
-    Piece::Draw();
 }

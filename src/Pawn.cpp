@@ -51,22 +51,7 @@ void Pawn::Update()
 { 
     Piece::Update(); 
     
-    availablePositions.clear();
-    
-    int yDir = isWhite ? -1 : 1;
-    
-    AddPosition(this, pos.x, pos.y + yDir);
-    if((isWhite && pos.y == 6) || (!isWhite && pos.y == 1))
-    {
-        AddPosition(this, pos.x, pos.y + (yDir * 2));
-    }
-    
-    Piece::RemoveBlockedPositions(this, false);
-    
-    for(Piece* otherPiece : Piece::pieces)
-    {
-        PawnSpecials(this, otherPiece);
-    }
+    CalculateAvailablePositions();
     
     Promotion(this);
 }
@@ -112,5 +97,23 @@ void Pawn::Promotion(Pawn* pawn)
         Vector2 promoPos = pawn->pos;
         Piece::DeletePiece(pawn);
         Queen::Make(promoPos, isPromoWhite, Queen::queens.size() + 1);
+    }
+}
+
+void Pawn::CalculatePawnMoves()
+{
+    int yDir = isWhite ? -1 : 1;
+    
+    AddPosition(this, pos.x, pos.y + yDir);
+    if((isWhite && pos.y == 6) || (!isWhite && pos.y == 1))
+    {
+        AddPosition(this, pos.x, pos.y + (yDir * 2));
+    }
+    
+    Piece::RemoveBlockedPositions(this, false);
+    
+    for(Piece* otherPiece : Piece::pieces)
+    {
+        PawnSpecials(this, otherPiece);
     }
 }

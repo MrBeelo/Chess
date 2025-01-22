@@ -31,7 +31,7 @@ class Piece
     static void RemovePositionsInDirection(Piece* piece, Piece* otherPiece, int yDirection, int xDirection);
     static void AddPosition(Piece* piece, int x, int y);
     static void RemovePosition(Piece* piece, int x, int y);
-    static bool CanMoveTo(Piece* piece, Vector2 position, int id);
+    static bool CanMoveTo(Piece* piece, Vector2 position);
     static void MoveTo(Piece* piece, Vector2 position, int id);
     static void MoveTo(Piece* piece, char file, int rank, int id);
     static void MoveBy(Piece* piece, int x, int y, int id);
@@ -39,6 +39,7 @@ class Piece
     static void DeletePiece(Piece* piece);
     static void DeletePiece(Vector2 pos);
     static void DeletePiece(char file, int rank);
+    void CalculateAvailablePositions();
 };
 
 #endif

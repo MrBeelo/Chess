@@ -55,8 +55,29 @@ void King::Update()
 { 
     Piece::Update(); 
     
-    availablePositions.clear();
+    CalculateAvailablePositions();
+}
+
+void King::Draw()
+{
+    Texture2D texture = isWhite ? textureWhite : textureBlack;
+    DrawTexturePro(texture, {0, 0, 150, 150}, rect, {0, 0}, 0, WHITE);
     
+    Piece::Draw();
+    
+    /*if(IsChecked(pos))
+    {
+        DrawText("Checked", 30, 30, 32, RED);
+    }
+    
+    if(IsMated())
+    {
+        DrawText("Mated", 30, 80, 32, RED);
+        }*/
+}
+
+void King::CalculateKingMoves()
+{
     availablePositions.push_back({pos.x + 1, pos.y});
     availablePositions.push_back({pos.x + -1, pos.y});
     availablePositions.push_back({pos.x, pos.y + 1});
@@ -80,14 +101,6 @@ void King::Update()
     }
     
     Piece::RemoveBlockedPositions(this, false);
-}
-
-void King::Draw()
-{
-    Texture2D texture = isWhite ? textureWhite : textureBlack;
-    DrawTexturePro(texture, {0, 0, 150, 150}, rect, {0, 0}, 0, WHITE);
-    
-    Piece::Draw();
 }
 
 bool King::CanCastleShort(King* king, Rook* rook)
@@ -114,7 +127,7 @@ void King::Castle(Rook* rook)
     }
 }
 
-bool King::IsChecked()
+bool King::IsChecked(Vector2 pos)
 {
     for(Piece* piece : Piece::pieces)
     {
@@ -130,39 +143,52 @@ bool King::IsChecked()
     return false;
 }
 
-bool King::IsChecked(Vector2 hypPos)
+
+bool King::IsMated()
 {
-    for(Piece* piece : Piece::pieces)
+    bool foundAvPosition = false;
+    CalculateAvailablePositions();
+    for(Vector2 avPosition : availablePositions)
     {
-        for(Vector2 avPosition : piece->availablePositions)
+        if(!IsChecked(avPosition) && CanMoveTo(this, avPosition))
         {
-            if(hypPos.x == avPosition.x && hypPos.y == avPosition.y && piece->isWhite != isWhite && piece->pieceType != PieceType::KING)
+            foundAvPosition = true;
+            break;
+        }
+    }
+    
+    //! EXPERIMENTAL
+    bool pieceCanBlock = false;
+    if(!foundAvPosition)
+    {
+        for(Piece* piece : Piece::pieces)
+        {
+            if(piece->isWhite == isWhite)
             {
-                return true;
+                Vector2 origPos = piece->pos;
+                for(Vector2 avPosition : availablePositions)
+                {
+                    if(piece->CanMoveTo(piece, avPosition))
+                    {
+                        piece->pos = avPosition;
+                        CalculateAvailablePositions();
+                        if(IsChecked(pos))
+                        {
+                            RemovePosition(piece, avPosition.x, avPosition.y);
+                        } else {
+                            pieceCanBlock = true;
+                        }
+                        piece->pos = origPos;
+                    }
+                }
             }
         }
     }
     
+    if(!foundAvPosition && IsChecked(pos) && !pieceCanBlock)
+    {
+        return true;
+    }
+    
     return false;
 }
-
-/*bool King::IsMated()
-{
-    if (!IsChecked()) 
-    {
-        return false; // Not in check, not mated
-    }
-
-    bool hasSafeMove = false; 
-
-    for (Vector2 avPosition : availablePositions) 
-    {
-        if (!IsChecked(avPosition)) 
-        {
-            hasSafeMove = true; 
-            break; // Break the loop as soon as a safe move is found
-        }
-    }
-
-    return !hasSafeMove; 
-}*/

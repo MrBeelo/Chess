@@ -12,7 +12,7 @@ CXX = g++
 CXXFLAGS = -Wall -Wextra -std=c++17 -I$(HEADERS_DIR)
 LDFLAGS = -L $(LIBRARIES_DIR) -lraylib
 
-TARGET_PLATFORM ?= win
+TARGET_PLATFORM ?= linux
 
 ifeq ($(TARGET_PLATFORM), win)
 	BUILD_DIR = bin/win
@@ -71,11 +71,10 @@ copy-assets:
 	@mkdir -p $(BUILD_DIR)
 	@cp -r $(ASSETS_DIR) $(BUILD_DIR)
 
-# Clean build artifacts
-clean:
+cleanthis:
 	rm -rf $(OBJ_DIR) $(BUILD_DIR)
 	
-cleanall:
+clean:
 	rm -rf obj bin
 
 # Phony targets

@@ -135,13 +135,9 @@ void Piece::RemovePieceFromVector(Piece* piece) {
     }
 }
 
-bool Piece::CanMoveTo(Piece* piece, Vector2 position, int id)
+bool Piece::CanMoveTo(Piece* piece, Vector2 position)
 {
     if (position.x < 0 || position.x > 7 || position.y < 0 || position.y > 7) {
-        return false;
-    }
-
-    if (piece->id != id) {
         return false;
     }
 
@@ -172,7 +168,7 @@ bool Piece::CanMoveTo(Piece* piece, Vector2 position, int id)
 
 void Piece::MoveTo(Piece* piece, Vector2 position, int id)
 {
-    if (CanMoveTo(piece, position, id)) 
+    if (CanMoveTo(piece, position)) 
     {
         piece->pos.x = position.x;
         piece->pos.y = position.y;
@@ -185,7 +181,7 @@ void Piece::MoveTo(Piece* piece, char file, int rank, int id)
 {
     Vector2 position = ChessNotation::CharIntToVec(file, rank);
     
-    if (CanMoveTo(piece, position, id)) 
+    if (CanMoveTo(piece, position)) 
     {
         piece->pos.x = position.x;
         piece->pos.y = position.y;
@@ -200,7 +196,7 @@ void Piece::MoveBy(Piece* piece, int x, int y, int id)
     float oldY = piece->pos.y;
     
     //TODO Fix this method:
-    if (CanMoveTo(piece, {oldX += x, oldY += y}, id)) 
+    if (CanMoveTo(piece, {oldX += x, oldY += y})) 
     {
         piece->pos.x += x;
         piece->pos.y += y;
@@ -300,5 +296,41 @@ void Piece::DeletePiece(char file, int rank)
         {
             DeletePiece(piece);
         }
+    }
+}
+
+void Piece::CalculateAvailablePositions()
+{
+    availablePositions.clear(); // Clear any previously calculated positions
+
+    // Basic logic: derived classes will override this for specific movement patterns
+    switch (pieceType)
+    {
+        case PieceType::PAWN:
+            dynamic_cast<Pawn*>(this)->CalculatePawnMoves();
+            break;
+
+        case PieceType::KNIGHT:
+            dynamic_cast<Knight*>(this)->CalculateKnightMoves();
+            break;
+
+        case PieceType::BISHOP:
+            dynamic_cast<Bishop*>(this)->CalculateBishopMoves();
+            break;
+
+        case PieceType::ROOK:
+            dynamic_cast<Rook*>(this)->CalculateRookMoves();
+            break;
+
+        case PieceType::QUEEN:
+            dynamic_cast<Queen*>(this)->CalculateQueenMoves();
+            break;
+
+        case PieceType::KING:
+            dynamic_cast<King*>(this)->CalculateKingMoves();
+            break;
+
+        default:
+            break;
     }
 }

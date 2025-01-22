@@ -22,6 +22,7 @@ class Queen : public Piece
     static void RemovePieceFromVector(Queen* queen);
     void Update() override;
     void Draw() override;
+    void CalculateQueenMoves();
 };
 
 #endif

@@ -51,8 +51,19 @@ void Knight::Update()
 { 
     Piece::Update(); 
     
-    availablePositions.clear();
+    CalculateAvailablePositions();
+}
+
+void Knight::Draw()
+{
+    Texture2D texture = isWhite ? textureWhite : textureBlack;
+    DrawTexturePro(texture, {0, 0, 150, 150}, rect, {0, 0}, 0, WHITE);
     
+    Piece::Draw();
+}
+
+void Knight::CalculateKnightMoves()
+{
     availablePositions.push_back({pos.x + 1, pos.y + 2});
     availablePositions.push_back({pos.x + -1, pos.y + 2});
     availablePositions.push_back({pos.x + 1, pos.y + -2});
@@ -63,12 +74,4 @@ void Knight::Update()
     availablePositions.push_back({pos.x + -2, pos.y + -1});
     
     Piece::RemoveBlockedPositions(this, true);
-}
-
-void Knight::Draw()
-{
-    Texture2D texture = isWhite ? textureWhite : textureBlack;
-    DrawTexturePro(texture, {0, 0, 150, 150}, rect, {0, 0}, 0, WHITE);
-    
-    Piece::Draw();
 }

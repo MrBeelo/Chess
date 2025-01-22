@@ -22,6 +22,7 @@ class Rook : public Piece
     static void RemovePieceFromVector(Rook* rook);
     void Update() override;
     void Draw() override;
+    void CalculateRookMoves();
 };
 
 #endif

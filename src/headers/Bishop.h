@@ -24,6 +24,7 @@ class Bishop : public Piece
     static void RemovePieceFromVector(Bishop* bishop);
     void Update() override;
     void Draw() override;
+    void CalculateBishopMoves();
 };
 
 #endif
