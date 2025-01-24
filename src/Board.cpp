@@ -11,6 +11,8 @@
 Board::Board(Vector2 size) : size(size) {}
 Board::~Board() {}
 
+bool Board::gameEnded = false;
+
 void Board::Update()
 {
     Vector2 mouse = GetMousePosition();
@@ -182,4 +184,42 @@ void Board::Draw()
         DrawText(posString3.c_str(), 10, 70, 20, BLACK);
         DrawText(posString4.c_str(), 10, 100, 20, BLACK);
     }
+}
+
+void Board::EndGameCheck()
+{
+    bool whiteKingAlive = false;
+    bool blackKingAlive = false;
+    for(King* king : King::kings)
+    {
+        if(king->isWhite)
+        {
+            whiteKingAlive = true;
+        } else {
+            blackKingAlive = true;
+        }
+    }
+    
+    if(!whiteKingAlive)
+    {
+        EndGame(false);
+    } else if(!blackKingAlive)
+    {
+        EndGame(true);
+    }
+}
+
+void Board::EndGame(bool whiteWon)
+{
+    string text = "";
+    if(!whiteWon)
+    {
+        text = "BLACK WINS";
+        DrawText(text.c_str(), (600 / 2) - MeasureText(text.c_str(), 32) / 2, (600 / 2) - 32, 32, GOLD);
+    } else if(whiteWon)
+    {
+        text = "WHITE WINS";
+        DrawText(text.c_str(), (600 / 2) - MeasureText(text.c_str(), 32) / 2, (600 / 2) - 32, 32, GOLD);
+    }
+    gameEnded = true;
 }

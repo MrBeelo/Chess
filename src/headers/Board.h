@@ -21,6 +21,9 @@ class Board
     void MovePiece(const Vector2& prevClickPos);
     void DeselectAll();
     void ValidateSelection();
+    static void EndGameCheck();
+    static void EndGame(bool whiteWon);
+    static bool gameEnded;
 };
 
 #endif

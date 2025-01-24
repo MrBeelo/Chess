@@ -68,25 +68,30 @@ int main ()
 	// game loop
 	while (!WindowShouldClose())
 	{
-	    Globals::Update();
-		
-        Globals::board->Update();
-	    for(Piece* piece : Piece::pieces)
+	    if(!Board::gameEnded)
 		{
-		    piece->Update();
+		    Globals::Update();
+
+            Globals::board->Update();
+            for(Piece* piece : Piece::pieces)
+            {
+                piece->Update();
+            }		
 		}
 		
 		BeginDrawing();
-		ClearBackground(BLACK);
+        ClearBackground(BLACK);
 
-		Globals::board->Draw();
-		
-		for(Piece* piece : Piece::pieces)
-		{
-		    piece->Draw(); 
-		}
+        Globals::board->Draw();
 
-		EndDrawing();
+        for(Piece* piece : Piece::pieces)
+        {
+            piece->Draw(); 
+        }
+
+        Board::EndGameCheck();
+
+        EndDrawing();
 	}
 	
 	Sounds::UnloadContent();

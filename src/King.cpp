@@ -65,15 +65,15 @@ void King::Draw()
     
     Piece::Draw();
     
-    /*if(IsChecked(pos))
+    if(IsChecked(pos))
     {
-        DrawText("Checked", 30, 30, 32, RED);
+        if(isWhite)
+        {
+            DrawText("White King Checked", 30, 570 - 32, 32, RED);
+        } else {
+            DrawText("Black King Checked", 30, 30, 32, RED);
+        }
     }
-    
-    if(IsMated())
-    {
-        DrawText("Mated", 30, 80, 32, RED);
-        }*/
 }
 
 void King::CalculateKingMoves()
@@ -144,8 +144,9 @@ bool King::IsChecked(Vector2 pos)
 }
 
 
-bool King::IsMated()
+/*bool King::IsMated()
 {
+    // Check if the king itself can escape check
     bool foundAvPosition = false;
     CalculateAvailablePositions();
     for(Vector2 avPosition : availablePositions)
@@ -157,38 +158,39 @@ bool King::IsMated()
         }
     }
     
-    //! EXPERIMENTAL
     bool pieceCanBlock = false;
-    if(!foundAvPosition)
+    for(Piece* piece : Piece::pieces)
     {
-        for(Piece* piece : Piece::pieces)
+        if(piece->isWhite == isWhite && piece != this)
         {
-            if(piece->isWhite == isWhite)
+            Vector2 origPos = piece->pos;
+            auto originalPositions = piece->availablePositions; // Cache original positions
+            
+            for(Vector2 avPosition : piece->availablePositions)
             {
-                Vector2 origPos = piece->pos;
-                for(Vector2 avPosition : availablePositions)
+                // Simulate move
+                piece->pos = avPosition;
+                CalculateAvailablePositions(); // Update moves after simulation
+                
+                if(!IsChecked(pos))
                 {
-                    if(piece->CanMoveTo(piece, avPosition))
-                    {
-                        piece->pos = avPosition;
-                        CalculateAvailablePositions();
-                        if(IsChecked(pos))
-                        {
-                            RemovePosition(piece, avPosition.x, avPosition.y);
-                        } else {
-                            pieceCanBlock = true;
-                        }
-                        piece->pos = origPos;
-                    }
+                    // If the king is no longer in check, the move is valid
+                    pieceCanBlock = true;
                 }
+                else
+                {
+                    // Remove the invalid move
+                    Piece::RemovePosition(piece, avPosition.x, avPosition.y);
+                }
+                
+                // Revert state
+                piece->pos = origPos;
+                piece->availablePositions = originalPositions; // Restore cached positions
+                CalculateAvailablePositions();
             }
         }
     }
     
-    if(!foundAvPosition && IsChecked(pos) && !pieceCanBlock)
-    {
-        return true;
-    }
-    
-    return false;
-}
+    // Final determination
+    return !foundAvPosition && IsChecked(pos) && !pieceCanBlock;
+    }*/
